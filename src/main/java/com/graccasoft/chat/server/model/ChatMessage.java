@@ -1,6 +1,7 @@
 package com.graccasoft.chat.server.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -18,6 +19,8 @@ public class ChatMessage {
     @ManyToOne
     private AppUser appUser;
     private String message;
+
+    @CreationTimestamp
     private Instant sentDate;
 
     public Long getId() {
