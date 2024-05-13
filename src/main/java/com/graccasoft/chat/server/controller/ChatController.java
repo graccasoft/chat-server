@@ -25,13 +25,13 @@ public class ChatController {
         return chatService.getRoomMessages(roomId);
     }
 
-    @PostMapping("{roomId}")
+    @PostMapping("{roomId}/message")
     ResponseEntity<ChatMessage> sendMessage(
             @PathVariable Long roomId,
             @RequestBody SendMessageDto sendMessageDto,
             Authentication authentication) {
         ChatMessage message = chatService.sendMessage(sendMessageDto, authentication.getName());
-        return ResponseEntity.created(URI.create("v1//chat-room/" + roomId + "/message" + message.getId()))
+        return ResponseEntity.created(URI.create("v1/chat-room/" + roomId + "/message" + message.getId()))
                 .body(message);
     }
 

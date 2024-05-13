@@ -1,7 +1,6 @@
 package com.graccasoft.chat.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.graccasoft.chat.server.model.ChatMessage;
 import com.graccasoft.chat.server.model.SendMessageDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +25,7 @@ class ChatControllerTest {
     @Test
     void shouldReturnMessages() throws Exception {
         mockMvc.perform(
-                get("/chat-room/1")
+                get("/v1/chat-room/1")
                         .with(user("test-user"))
         ).andExpect(status().isOk());
     }
@@ -38,7 +35,8 @@ class ChatControllerTest {
         SendMessageDto sendMessageDto = new SendMessageDto(1l, "test message");
 
         mockMvc.perform(
-                        post("/chat-room/1")
+                        post("/v1/chat-room/1/message")
+                                .with(user("angler"))
                                 .content(asJsonString(sendMessageDto))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
