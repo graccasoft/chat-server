@@ -27,7 +27,9 @@ class ChatControllerTest {
         mockMvc.perform(
                 get("/v1/chat-room/1")
                         .with(user("test-user"))
-        ).andExpect(status().isOk());
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].message").value("Where is the cheapest tackle shop"));
     }
 
     @Test
@@ -43,6 +45,19 @@ class ChatControllerTest {
 
                 ).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("test message"));
+    }
+
+    @Test
+    void shouldNotSendMessageIfNotLoggedIn() throws Exception {
+        SendMessageDto sendMessageDto = new SendMessageDto(1l, "test message");
+
+        mockMvc.perform(
+                        post("/v1/chat-room/1/message")
+                                .content(asJsonString(sendMessageDto))
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+
+                ).andExpect(status().isUnauthorized());
     }
 
     public static String asJsonString(final Object obj) {

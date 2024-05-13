@@ -1,9 +1,6 @@
 package com.graccasoft.chat.server.service;
 
-import com.graccasoft.chat.server.model.AppUser;
-import com.graccasoft.chat.server.model.ChatMessage;
-import com.graccasoft.chat.server.model.ChatRoom;
-import com.graccasoft.chat.server.model.SendMessageDto;
+import com.graccasoft.chat.server.model.*;
 import com.graccasoft.chat.server.repository.AppUserRepository;
 import com.graccasoft.chat.server.repository.ChatMessageRepository;
 import com.graccasoft.chat.server.repository.ChatRoomRepository;
@@ -26,7 +23,7 @@ public class ChatService {
         this.chatMessageRepository = chatMessageRepository;
     }
 
-    public ChatMessage sendMessage(SendMessageDto sendMessageDto, String username){
+    public ChatMessageDto sendMessage(SendMessageDto sendMessageDto, String username){
         //todo throw an exception if for some reason user not found
         AppUser appUser = appUserRepository.findByUsername(username).orElse(null);
 
@@ -38,15 +35,26 @@ public class ChatService {
         chatMessage.setAppUser(appUser);
         chatMessage.setChatRoom(chatRoom);
 
-        return chatMessageRepository.save(chatMessage);
+        return  messageToDto( chatMessageRepository.save(chatMessage) );
     }
 
-    //todo use DTO
-    public List<ChatMessage> getRoomMessages(Long chatRoomId){
-        return chatMessageRepository.findAllByChatRoom_Id(chatRoomId);
+    public List<ChatMessageDto> getRoomMessages(Long chatRoomId){
+        return chatMessageRepository.findAllByChatRoom_Id(chatRoomId)
+                .stream()
+                .map(this::messageToDto)
+                .toList();
     }
 
     public void deleteMessage(Long id){
         chatMessageRepository.deleteById(id);
+    }
+
+    private ChatMessageDto messageToDto(ChatMessage chatMessage){
+        return new ChatMessageDto(
+                chatMessage.getId(),
+                chatMessage.getAppUser().getUsername(),
+                chatMessage.getMessage(),
+                chatMessage.getSentDate()
+        );
     }
 }

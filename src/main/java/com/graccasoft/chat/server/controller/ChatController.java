@@ -1,6 +1,7 @@
 package com.graccasoft.chat.server.controller;
 
 import com.graccasoft.chat.server.model.ChatMessage;
+import com.graccasoft.chat.server.model.ChatMessageDto;
 import com.graccasoft.chat.server.model.SendMessageDto;
 import com.graccasoft.chat.server.service.ChatService;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +22,17 @@ public class ChatController {
     }
 
     @GetMapping("{roomId}")
-    List<ChatMessage> getRoomMessages(@PathVariable Long roomId) {
+    List<ChatMessageDto> getRoomMessages(@PathVariable Long roomId) {
         return chatService.getRoomMessages(roomId);
     }
 
     @PostMapping("{roomId}/message")
-    ResponseEntity<ChatMessage> sendMessage(
+    ResponseEntity<ChatMessageDto> sendMessage(
             @PathVariable Long roomId,
             @RequestBody SendMessageDto sendMessageDto,
             Authentication authentication) {
-        ChatMessage message = chatService.sendMessage(sendMessageDto, authentication.getName());
-        return ResponseEntity.created(URI.create("v1/chat-room/" + roomId + "/message" + message.getId()))
+        ChatMessageDto message = chatService.sendMessage(sendMessageDto, authentication.getName());
+        return ResponseEntity.created(URI.create("v1/chat-room/" + roomId + "/message" + message.id()))
                 .body(message);
     }
 
