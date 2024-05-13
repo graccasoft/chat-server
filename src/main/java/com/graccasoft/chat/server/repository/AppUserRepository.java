@@ -7,5 +7,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-    Optional<UserDetails> findByUsername(String username);
+    Optional<AppUser> findByUsername(String username);
 }
