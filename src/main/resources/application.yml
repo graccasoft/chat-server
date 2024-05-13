@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: chat-server
+  h2:
+    console.enabled: true
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    url: jdbc:h2:mem:chat_server
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+server:
+  port: 8082
+
+
