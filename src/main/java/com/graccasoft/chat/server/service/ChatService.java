@@ -54,6 +54,7 @@ public class ChatService {
         chatMessageRepository.deleteById(id);
     }
 
+    //todo: move this to a seperate class, it violates SOLID SRP
     private ChatMessageDto messageToDto(ChatMessage chatMessage){
         return new ChatMessageDto(
                 chatMessage.getId(),
