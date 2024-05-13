@@ -4,6 +4,8 @@ import com.graccasoft.chat.server.model.*;
 import com.graccasoft.chat.server.repository.AppUserRepository;
 import com.graccasoft.chat.server.repository.ChatMessageRepository;
 import com.graccasoft.chat.server.repository.ChatRoomRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class ChatService {
         this.chatMessageRepository = chatMessageRepository;
     }
 
+    @CacheEvict(value = {"messages"}, allEntries = true)
     public ChatMessageDto sendMessage(SendMessageDto sendMessageDto, String username){
         //todo throw an exception if for some reason user not found
         AppUser appUser = appUserRepository.findByUsername(username).orElse(null);
@@ -38,6 +41,7 @@ public class ChatService {
         return  messageToDto( chatMessageRepository.save(chatMessage) );
     }
 
+    @Cacheable("messages")
     public List<ChatMessageDto> getRoomMessages(Long chatRoomId){
         return chatMessageRepository.findAllByChatRoom_Id(chatRoomId)
                 .stream()
@@ -45,6 +49,7 @@ public class ChatService {
                 .toList();
     }
 
+    @CacheEvict(value = {"messages"}, allEntries = true)
     public void deleteMessage(Long id){
         chatMessageRepository.deleteById(id);
     }
