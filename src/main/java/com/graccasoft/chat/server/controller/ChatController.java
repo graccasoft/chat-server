@@ -21,12 +21,12 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping("{roomId}")
+    @GetMapping("{roomId}/messages")
     List<ChatMessageDto> getRoomMessages(@PathVariable Long roomId) {
         return chatService.getRoomMessages(roomId);
     }
 
-    @PostMapping("{roomId}/message")
+    @PostMapping("{roomId}/messages")
     ResponseEntity<ChatMessageDto> sendMessage(
             @PathVariable Long roomId,
             @RequestBody SendMessageDto sendMessageDto,
@@ -36,7 +36,7 @@ public class ChatController {
                 .body(message);
     }
 
-    @DeleteMapping("{roomId}/message/{id}")
+    @DeleteMapping("{roomId}/messages/{id}")
     void deleteMessage(@PathVariable Long roomId, @PathVariable Long id) {
         chatService.deleteMessage(id);
     }

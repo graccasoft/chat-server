@@ -25,7 +25,7 @@ class ChatControllerTest {
     @Test
     void shouldReturnMessages() throws Exception {
         mockMvc.perform(
-                get("/v1/chat-room/1")
+                get("/v1/chat-room/1/messages")
                         .with(user("test-user"))
         )
                 .andExpect(status().isOk())
@@ -37,7 +37,7 @@ class ChatControllerTest {
         SendMessageDto sendMessageDto = new SendMessageDto(1l, "test message");
 
         mockMvc.perform(
-                        post("/v1/chat-room/1/message")
+                        post("/v1/chat-room/1/messages")
                                 .with(user("angler"))
                                 .content(asJsonString(sendMessageDto))
                                 .accept(MediaType.APPLICATION_JSON)
@@ -52,7 +52,7 @@ class ChatControllerTest {
         SendMessageDto sendMessageDto = new SendMessageDto(1l, "test message");
 
         mockMvc.perform(
-                        post("/v1/chat-room/1/message")
+                        post("/v1/chat-room/1/messages")
                                 .content(asJsonString(sendMessageDto))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
